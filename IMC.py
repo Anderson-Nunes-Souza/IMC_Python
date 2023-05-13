@@ -1,4 +1,4 @@
-#Checkagem de Cenarios possíveis
+#Checkagem de cenários possíveis
 scenariosdict = {
     "Magreza" : {
         "Altura": 1.70,
@@ -17,14 +17,12 @@ scenariosdict = {
         "Peso": 110
     }
 }
-print(type(scenariosdict))
 
-def CalculaIMC(scenario,altura, peso):
-    altura = float(scenariosdict[scenario]["Altura"])
-    peso = float(scenariosdict[scenario]["Peso"])
+#Função que  calcula o IMC recebido do input e do Teste de cenários
+def CalculaIMC(altura, peso):
     #IMC = Peso / Altura²
     imc = float(peso / (altura * altura))
-    imc_formatado = float("{:.2f}".format(imc))
+    imc_formatado = round(imc, 2)
     
     #Magreza, quando o resultado é menor que 18,5 kg/m2;
     if imc_formatado < 18.5:
@@ -51,20 +49,31 @@ def CalculaIMC(scenario,altura, peso):
 #Função de checkagem de scenarios possíveis
 def SanityCheck():
     for scenario in scenariosdict:
-        CalculaIMC(scenario, scenariosdict[scenario]["Altura"], scenariosdict[scenario]["Peso"])
+        CalculaIMC(scenariosdict[scenario]["Altura"], scenariosdict[scenario]["Peso"])
 
 def main():
     print("==================================")
     print("App Calculo de IMC")
-    print("insira seu peso:")
-    peso =  float(input())
-    print("insira sua altura:")
-    altura = float(input())
-    #Continuar daqui 
-    scenariosdict["Input_usuario"]["Altura"] = altura
-    scenariosdict["Input_usuario"]["Peso"] = peso 
-    #CalculaIMC(scenariosdict[scenario]["Altura"], scenariosdict[scenario]["Peso"])
-    print(scenariosdict)
+
+    # Obter peso do usuário (com validação)
+    peso = None
+    while peso is None:
+        peso_input = input("Insira seu peso (em kg): ")
+        if peso_input.isdigit():
+            peso = float(peso_input)
+        else:
+            print("Por favor, insira um valor numérico para o peso.")
+    
+    # Obter altura do usuário (com validação)
+    altura = None
+    while altura is None:
+        altura_input = input("insira sua altura em metros: ")
+        if '.' in altura_input and all([c.isdigit() or c == '.' for c in altura_input]):
+                altura = float(altura_input)
+        else:
+                print("Insira um valor de altura válido (Ex: 1,80 ou 1.10): ")
+
+    CalculaIMC(altura, peso)
 
 
 SanityCheck()
